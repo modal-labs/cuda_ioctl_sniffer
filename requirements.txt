@@ -1,0 +1,3 @@
+# Must match the clang version on the host,
+# which must be pointed at with `ci.Config.set_library_file()`.
+clang
