@@ -295,7 +295,11 @@ int ioctl(int filedes, unsigned long request, void *argp) {
           case NV0000_CTRL_CMD_CLIENT_SET_INHERITED_SHARE_POLICY: cmd_string = "NV0000_CTRL_CMD_CLIENT_SET_INHERITED_SHARE_POLICY"; break;
           cmd(NV0000_CTRL_CMD_SYSTEM_GET_P2P_CAPS_MATRIX);
           cmd(NV0000_CTRL_CMD_GPU_DETACH_IDS);
-          case NV0080_CTRL_CMD_GPU_GET_CLASSLIST: cmd_string = "NV0080_CTRL_CMD_GPU_GET_CLASSLIST"; break;
+          case NV0080_CTRL_CMD_GPU_GET_CLASSLIST: {
+            NV0080_CTRL_GPU_GET_CLASSLIST_PARAMS *subParams = (NV0080_CTRL_GPU_GET_CLASSLIST_PARAMS *)p->params;
+            printf("numClasses=%x  classList=%x ", subParams->numClasses, subParams->classList);
+            cmd_string = "NV0080_CTRL_CMD_GPU_GET_CLASSLIST"; break;
+          }
           case NV0080_CTRL_CMD_GPU_GET_NUM_SUBDEVICES: cmd_string = "NV0080_CTRL_CMD_GPU_GET_NUM_SUBDEVICES"; break;
           case NV0080_CTRL_CMD_GPU_GET_VIRTUALIZATION_MODE: cmd_string = "NV0080_CTRL_CMD_GPU_GET_VIRTUALIZATION_MODE"; break;
           case NV0080_CTRL_CMD_HOST_GET_CAPS: cmd_string = "NV0080_CTRL_CMD_HOST_GET_CAPS"; break;
