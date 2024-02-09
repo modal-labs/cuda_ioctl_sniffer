@@ -234,7 +234,7 @@ int ioctl(int filedes, unsigned long request, void *argp) {
       ret = my_ioctl(filedes, request, argp);
     }
 
-    printf("%3d: %d = %3d(%20s) 0x%3x ", ioctl_num, ret, filedes, files[filedes].c_str(), size);
+    printf("%3d: %d = %3d(%20s) 0x%3x ", ioctl_num, ret, filedes, files[filedes].c_str(), nr);
     ioctl_num++;
     switch (nr) {
       // main ones
@@ -272,7 +272,7 @@ int ioctl(int filedes, unsigned long request, void *argp) {
           case NV0000_CTRL_CMD_SYSTEM_GET_FABRIC_STATUS: cmd_string = "NV0000_CTRL_CMD_SYSTEM_GET_FABRIC_STATUS"; break;
           case NV0000_CTRL_CMD_GPU_ATTACH_IDS: {
             NV0000_CTRL_GPU_ATTACH_IDS_PARAMS *subParams = (NV0000_CTRL_GPU_ATTACH_IDS_PARAMS *)p->params;
-            printf("attaching %x ", subParams->gpuIds[0]);
+            // printf("attaching %x ", subParams->gpuIds[0]);
             cmd_string = "NV0000_CTRL_CMD_GPU_ATTACH_IDS"; break;
           }
           case NV0000_CTRL_CMD_GPU_GET_ATTACHED_IDS: cmd_string = "NV0000_CTRL_CMD_GPU_GET_ATTACHED_IDS"; break;
@@ -289,7 +289,7 @@ int ioctl(int filedes, unsigned long request, void *argp) {
               #define NV0000_CTRL_CMD_CLIENT_GET_ADDR_SPACE_TYPE_FABRIC  0x00000004
             */
             NV0000_CTRL_CLIENT_GET_ADDR_SPACE_TYPE_PARAMS *subParams = (NV0000_CTRL_CLIENT_GET_ADDR_SPACE_TYPE_PARAMS *)p->params;
-            printf("in: hObject=%x  mapFlags=%x   out: addrSpaceType:%x ", subParams->hObject, subParams->mapFlags, subParams->addrSpaceType);
+            // printf("in: hObject=%x  mapFlags=%x   out: addrSpaceType:%x ", subParams->hObject, subParams->mapFlags, subParams->addrSpaceType);
             cmd_string = "NV0000_CTRL_CMD_CLIENT_GET_ADDR_SPACE_TYPE"; break;
           }
           case NV0000_CTRL_CMD_CLIENT_SET_INHERITED_SHARE_POLICY: cmd_string = "NV0000_CTRL_CMD_CLIENT_SET_INHERITED_SHARE_POLICY"; break;
@@ -315,7 +315,7 @@ int ioctl(int filedes, unsigned long request, void *argp) {
           case NV2080_CTRL_CMD_GPU_GET_ACTIVE_PARTITION_IDS: cmd_string = "NV2080_CTRL_CMD_GPU_GET_ACTIVE_PARTITION_IDS"; break;
           case NV2080_CTRL_CMD_GPU_GET_GID_INFO: {
             NV2080_CTRL_GPU_GET_GID_INFO_PARAMS *subParams = (NV2080_CTRL_GPU_GET_GID_INFO_PARAMS *)p->params;
-            printf("index %d flags %d length %d ", subParams->index, subParams->flags, subParams->length);
+            // printf("index %d flags %d length %d ", subParams->index, subParams->flags, subParams->length);
             cmd_string = "NV2080_CTRL_CMD_GPU_GET_GID_INFO"; break;
           }
           case NV2080_CTRL_CMD_GPU_GET_NAME_STRING: cmd_string = "NV2080_CTRL_CMD_GPU_GET_NAME_STRING"; break;
@@ -351,7 +351,7 @@ int ioctl(int filedes, unsigned long request, void *argp) {
           case NVC36F_CTRL_GET_CLASS_ENGINEID: cmd_string = "NVC36F_CTRL_GET_CLASS_ENGINEID"; break;
           case NVC36F_CTRL_CMD_GPFIFO_GET_WORK_SUBMIT_TOKEN: {
             NVC36F_CTRL_CMD_GPFIFO_GET_WORK_SUBMIT_TOKEN_PARAMS *subParams = (NVC36F_CTRL_CMD_GPFIFO_GET_WORK_SUBMIT_TOKEN_PARAMS *)p->params;
-            printf("work submit token 0x%x ", subParams->workSubmitToken);
+            // printf("work submit token 0x%x ", subParams->workSubmitToken);
             workTokens[subParams->workSubmitToken] = p->hObject;
             cmd_string = "NVC36F_CTRL_CMD_GPFIFO_GET_WORK_SUBMIT_TOKEN"; break;
           }
@@ -480,7 +480,9 @@ int ioctl(int filedes, unsigned long request, void *argp) {
       } break;
       case NV_ESC_RM_UPDATE_DEVICE_MAPPING_INFO: printf("NV_ESC_RM_UPDATE_DEVICE_MAPPING_INFO\n"); break;
       case NV_ESC_RM_VID_HEAP_CONTROL: {
+        printf("NV_ESC_RM_VID_HEAP_CONTROL ");
         pprint((NVOS32_PARAMETERS *)argp);
+        printf("\n");
         //pprint(((NVOS32_PARAMETERS *)argp)->data.AllocSize);
         /*NVOS32_PARAMETERS *p = (NVOS32_PARAMETERS *)argp;
         printf("NV_ESC_RM_VID_HEAP_CONTROL %x\n", p->function);
@@ -510,6 +512,7 @@ int ioctl(int filedes, unsigned long request, void *argp) {
   } else if (files.count(filedes)) {
     printf("non nvidia ioctl %d %s ", filedes, files[filedes].c_str());
     if (strcmp(files[filedes].c_str(), "/dev/nvidia-uvm") == 0) {
+      printf("0x%x ", request);
       //printf("UVM BULLSHIT BLOCKED\n");
       ret = my_ioctl(filedes, request, argp);
       switch (request) {
