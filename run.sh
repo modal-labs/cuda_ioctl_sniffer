@@ -6,7 +6,7 @@ set -o nounset
 
 ./make_sniff.sh
 
-SOURCE="../../main.cu"
+SOURCE="../main.cu"
 BIN_NAME="main"
 BIN="out/${BIN_NAME}"
 ARCH="sm_52"
